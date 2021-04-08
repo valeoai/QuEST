@@ -2,21 +2,13 @@ config = {}
 # set the parameters related to the training and testing set
 data_train_opt = {}
 data_train_opt['dataset_name'] = 'ImageNet'
-data_train_opt['dataset_args'] = {
-    'split': 'train',
-    'use_geometric_aug':True,
-    'use_color_aug': False,
-    'cutout_length': 0}
+data_train_opt['dataset_args'] = {'split': 'train'}
 data_train_opt['epoch_size'] = None
 data_train_opt['batch_size'] = 256
 
 data_test_opt = {}
 data_test_opt['dataset_name'] = 'ImageNet'
-data_test_opt['dataset_args'] = {
-    'split': 'val',
-    'use_geometric_aug':False,
-    'use_color_aug': False,
-    'cutout_length': 0}
+data_test_opt['dataset_args'] = {'split': 'val'}
 data_test_opt['batch_size'] = 200
 
 config['data_train_opt'] = data_train_opt

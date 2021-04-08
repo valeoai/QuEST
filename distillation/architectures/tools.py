@@ -8,6 +8,7 @@ import distillation.architectures.feature_extractors.utils as futils
 import distillation.architectures.feature_extractors.VGG_ImageNet as VGG_ImageNet
 import distillation.architectures.feature_extractors.mobilenetv2 as mobilenet
 
+
 class ResNetClassifier(nn.Module):
     def __init__(self, model):
         super(ResNetClassifier, self).__init__()
@@ -75,6 +76,7 @@ class VGG9FeatureExtractor(futils.SequentialFeatureExtractorAbstractClass):
         super(VGG9FeatureExtractor, self).__init__(
             all_feat_names, feature_blocks_for_RN)
 
+
 def split_network( model, extract_from_layer, after_relu):
     """
     This function splits the network in Feature extractor and classifier networks.
@@ -118,6 +120,7 @@ def split_network( model, extract_from_layer, after_relu):
             classifier = ResNetClassifier(model)
             return feature_ext, classifier
 
+
 class Reshape(nn.Module):
     def __init__(self, *args):
         super(Reshape, self).__init__()
@@ -125,6 +128,7 @@ class Reshape(nn.Module):
 
     def forward(self, x):
         return x.view(self.shape)
+
 
 def global_pooling(x, pool_type):
     assert(x.dim() == 4)
@@ -147,34 +151,14 @@ class GlobalPooling(nn.Module):
 
 
 class Conv2dCos(nn.Module):
-    def __init__(
-        self,
-        in_planes,
-        out_planes,
-        kernel_size=3,
-        stride=1,
-        padding=1,
-        bias=False,
-        scale=None,
-        learn_scale=True,
-        per_plane=False,
-        normalize_x=True,
-        normalize_w=True,):
-
+    def __init__(self, in_planes, out_planes, bias=False, scale=None, learn_scale=True):
         super(Conv2dCos, self).__init__()
 
         self.in_planes = in_planes
         self.out_planes = out_planes
-        self.kernel_size = kernel_size
-        self.stride = stride
-        self.padding = padding
-        self.normalize_x = normalize_x
-        self.normalize_w = normalize_w
 
-        in_planes_total = kernel_size * kernel_size * in_planes
-        weight = torch.FloatTensor(
-            out_planes, in_planes_total, 1, 1).normal_(
-                0.0, np.sqrt(2.0/in_planes_total))
+        weight = torch.FloatTensor(out_planes, in_planes, 1, 1).normal_(
+            0.0, np.sqrt(2.0/in_planes))
         self.weight = nn.Parameter(weight, requires_grad=True)
 
         if bias:
@@ -182,40 +166,16 @@ class Conv2dCos(nn.Module):
             self.bias = nn.Parameter(bias, requires_grad=True)
         else:
             self.bias = None
-
         if scale:
-            num_scale_values = out_planes if per_plane else 1
-            scale = torch.FloatTensor(num_scale_values).fill_(scale)
+            scale = torch.FloatTensor(1).fill_(scale)
             self.scale = nn.Parameter(scale, requires_grad=learn_scale)
         else:
             self.scale = None
 
     def forward(self, x):
         weight = self.weight
-
-        if self.kernel_size == 1 and self.stride==1:
-            x2 = x
-        else:
-            x2 = F.unfold(x, self.kernel_size, padding=self.padding, stride=self.stride)
-
-        if self.normalize_x:
-            x2 = F.normalize(x2, p=2, dim=1, eps=1e-12)
-        x2 = x2.view(
-            x.size(0), -1, x.size(2) // self.stride, x.size(3) // self.stride)
-        if self.normalize_w:
-            weight = F.normalize(weight, p=2, dim=1, eps=1e-12)
-
+        x = F.normalize(x, p=2, dim=1, eps=1e-12)
+        weight = F.normalize(weight, p=2, dim=1, eps=1e-12)
         if self.scale is not None:
             weight = weight * self.scale.view(-1, 1, 1, 1)
-
-        x_out = F.conv2d(x2, weight, bias=self.bias, stride=1, padding=0)
-        return x_out
-
-    def extra_repr(self):
-        s = (
-            '{0}, {1}, kernel_size={2}, stride={3}, padding={4}'.format(
-                self.in_planes, self.out_planes, self.kernel_size,
-                self.stride, self.padding))
-        if self.bias is None:
-            s += ', bias=False'
-        return s
+        return F.conv2d(x, weight, bias=self.bias, stride=1, padding=0)

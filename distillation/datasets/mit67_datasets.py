@@ -42,17 +42,12 @@ class MaskedRandomSampler(data.Sampler):
         return len(self.mask)*self.rep_num
 
 
-def get_dataset_subsplit(data, num_examples, split_ratio, repeat=False, rotate_split=0):
+def get_dataset_subsplit(data, num_examples, split_ratio, repeat=False):
     label2ind = utils.buildLabelIndex(data.targets)
     all_indices = []
     for label, img_indices in label2ind.items():
         indices = np.where(np.array(data.targets)==label)[0].tolist()
         assert img_indices == indices
-
-        assert rotate_split >=0 and rotate_split < 1.0
-        if rotate_split > 0.0:
-            split_idx = int(len(img_indices)*rotate_split)
-            indices = indices[split_idx:] + indices[:split_idx]
 
         if num_examples is None:
             start_idx = int(len(img_indices)*split_ratio[0])
@@ -84,16 +79,13 @@ class AbstractDataset(data.Dataset):
         split="train",
         dataset_name="MITScenes67",
         num_examples=None,
-        transform=None,
-        rotate_split=0.0):
-        assert dataset_name in ("MITScenes67", "CUB200")
+        transform=None):
+        assert dataset_name in ("MITScenes67",)
         assert (split in ("train", "val", "trainval", "test"))
         self.split = split
         self.name = f"{dataset_name}_Split_{self.split}"
         if (num_examples is not None) and (split in ("train", "val", "trainval")):
             self.name += f"_NumExamples_{num_examples}"
-        if rotate_split > 0.0:
-            self.name += f"_RotateSplit_{rotate_split}"
 
         data_dir = download(dataset_name)
         print(f"==> Loading {dataset_name} dataset - split {self.split}")
@@ -118,8 +110,7 @@ class AbstractDataset(data.Dataset):
                 data=self.data,
                 num_examples=num_examples,
                 split_ratio=self.split_ratios[self.split],
-                repeat=(self.split == "train"),
-                rotate_split=rotate_split)
+                repeat=(self.split == "train"))
             self.data = data
             self.sampler = sampler
 
@@ -132,9 +123,7 @@ class AbstractDataset(data.Dataset):
 
 
 class MITScenes(AbstractDataset):
-    def __init__(
-        self, split="train", num_examples=None, do_not_use_random_transf=False,
-        rotate_split=0.0):
+    def __init__(self, split="train", num_examples=None):
 
         normalize = transforms.Normalize(
             mean=_MEAN_PIXEL,
@@ -153,74 +142,11 @@ class MITScenes(AbstractDataset):
             normalize,
         ])
 
-        if do_not_use_random_transf or split == "test":
+        if split == "test":
             transform = transform_test
         else:
             transform = transform_train
 
         AbstractDataset.__init__(
-            self,
-            split=split,
-            dataset_name="MITScenes67",
-            num_examples=num_examples,
-            transform=transform,
-            rotate_split=rotate_split)
-
-
-class CUB200(AbstractDataset):
-    def __init__(
-        self, split="train", num_examples=None, do_not_use_random_transf=False,
-        rotate_split=0.0):
-
-        normalize = transforms.Normalize(
-            mean=_MEAN_PIXEL,
-            std=_STD_PIXEL,
-        )
-        transform_train = transforms.Compose([
-            transforms.RandomResizedCrop(224),
-            transforms.RandomHorizontalFlip(),
-            transforms.ToTensor(),
-            normalize,
-        ])
-        transform_test = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            normalize,
-        ])
-
-        if do_not_use_random_transf or split == "test":
-            transform = transform_test
-        else:
-            transform = transform_train
-
-        AbstractDataset.__init__(
-            self,
-            split=split,
-            dataset_name="CUB200",
-            num_examples=num_examples,
-            transform=transform,
-            rotate_split=rotate_split)
-
-
-if __name__ == "__main__":
-    dataset = CUB200(split="train", do_not_use_random_transf=False, rotate_split=0.2)
-    print(len(dataset))
-    """
-    import torchvision
-    from distillation.dataloaders.basic_dataloaders import SimpleDataloader
-
-    dloader = SimpleDataloader(dataset, batch_size=32, train=True)
-
-    for i, batch in enumerate(dloader()):
-        x, y = batch
-        print(f"x: {x.size()}")
-
-        x_grid = torchvision.utils.make_grid(
-            x, nrow=8, padding=8, normalize=True)
-        torchvision.utils.save_image(
-            x_grid, "./MIT67_x_dloader_{0}.jpg".format(i))
-
-        if i >= 4:
-            break
-     """
+            self, split=split, dataset_name="MITScenes67",
+            num_examples=num_examples, transform=transform)

@@ -1,22 +1,14 @@
 config = {}
 # set the parameters related to the training and testing set
 data_train_opt = {}
-data_train_opt['dataset_name'] = 'CIFARv3'
-data_train_opt['dataset_args'] = {
-    'split': 'train',
-    'version': 'CIFAR100',
-    'cutout_length': 0,
-    'cutout_n_holes': 0}
+data_train_opt['dataset_name'] = 'CIFAR100'
+data_train_opt['dataset_args'] = {'split': 'train'}
 data_train_opt['epoch_size'] = None
 data_train_opt['batch_size'] = 64
 
 data_test_opt = {}
-data_test_opt['dataset_name'] = 'CIFARv3'
-data_test_opt['dataset_args'] = {
-    'split': 'val',
-    'version': 'CIFAR100',
-    'cutout_length': 0,
-    'cutout_n_holes': 0}
+data_test_opt['dataset_name'] = 'CIFAR100'
+data_test_opt['dataset_args'] = {'split': 'val'}
 data_test_opt['batch_size'] = 100
 
 config['data_train_opt'] = data_train_opt
@@ -100,5 +92,5 @@ criterions = {}
 criterions['loss'] = {'ctype':'CrossEntropyLoss', 'opt':None}
 config['criterions'] = criterions
 
-config['algorithm_type'] = 'classification.classification_bow_transfer'
-config['BoW_loss_coef'] = 1.0
+config['algorithm_type'] = 'classification.classification_quest'
+config['quest_loss_coef'] = 1.0

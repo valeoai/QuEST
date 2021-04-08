@@ -152,5 +152,5 @@ criterions = {}
 criterions['loss'] = {'ctype':'CrossEntropyLoss', 'opt':None}
 config['criterions'] = criterions
 config['feature_name'] = feature_name
-config['algorithm_type'] = 'classification.classification_bow_transfer'
-config['BoW_loss_coef'] = 20.0
+config['algorithm_type'] = 'classification.classification_quest'
+config['quest_loss_coef'] = 20.0

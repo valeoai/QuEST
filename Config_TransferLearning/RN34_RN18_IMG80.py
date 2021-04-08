@@ -1,6 +1,6 @@
 config = {}
 # set the parameters related to the training and testing set
-config['use_vid_dataloader'] = True
+config['use_ds_dataloader'] = True
 
 data_train_opt = {}
 data_train_opt['dataset_name'] = 'MITScenes'
@@ -157,5 +157,5 @@ criterions = {}
 criterions['loss'] = {'ctype':'CrossEntropyLoss', 'opt':None}
 config['criterions'] = criterions
 config['feature_name'] = feature_name
-config['algorithm_type'] = 'classification.classification_bow_transfer'
-config['BoW_loss_coef'] = 10.0
+config['algorithm_type'] = 'classification.classification_quest'
+config['quest_loss_coef'] = 10.0

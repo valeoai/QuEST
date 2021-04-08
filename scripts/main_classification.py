@@ -7,7 +7,7 @@ from sacred.utils import apply_backspaces_and_linefeeds
 from sacred.observers import MongoObserver
 
 from distillation.algorithms.classification.classification import Classification
-from distillation.algorithms.classification.classification_bow_transfer import ClassificationBoWtransfer
+from distillation.algorithms.classification.classification_quest import ClassificationQUEST
 from distillation.dataloaders.basic_dataloaders import SimpleDataloader
 from distillation.dataloaders.basic_dataloaders import DataloaderSampler
 from distillation.datasets import dataset_factory
@@ -98,8 +98,8 @@ def main_experiment(config,
     config['disp_step'] = disp_step
 
     algorithm_type = config['algorithm_type']
-    if (algorithm_type == 'classification.classification_bow_transfer' or kmeans > 0):
-        algorithm = ClassificationBoWtransfer(config, _run, _log)
+    if (algorithm_type == 'classification.classification_quest' or kmeans > 0):
+        algorithm = ClassificationQUEST(config, _run, _log)
     elif algorithm_type == 'classification.classification':
         algorithm = Classification(config, _run, _log)
 
@@ -152,10 +152,8 @@ def main_experiment(config,
         dataset_train = dataset_factory(
             dataset_name=data_train_opt['dataset_name'], **dataset_train_args)
 
-        use_vid_dataloader = (
-            config.get('use_vid_dataloader', False))
-
-        if use_vid_dataloader:
+        use_ds_dataloader = config.get('use_ds_dataloader', False)
+        if use_ds_dataloader:
             dloader_train = DataloaderSampler(
                 dataset=dataset_train,
                 batch_size=data_train_opt['batch_size'],

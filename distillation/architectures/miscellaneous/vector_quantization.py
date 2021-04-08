@@ -126,7 +126,4 @@ def create_model(opt):
     epsilon = opt.get('epsilon', 1e-5)
     temperature = opt.get('temperature', None)
 
-    return VectorQuantizerEMA(
-            num_embeddings, embedding_dim, commitment_cost, decay, epsilon, temperature)
-
-
+    return VectorQuantizerEMA(num_embeddings, embedding_dim, commitment_cost, decay, epsilon, temperature)

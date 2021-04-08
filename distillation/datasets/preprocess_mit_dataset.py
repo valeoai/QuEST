@@ -26,11 +26,11 @@ def copy_images_for_scr_to_dst(filename, src_dir, dst_dir):
 
 
 if __name__ == '__main__':
-    src_dir = '/datasets_master/MITscenes/Images'
-    dst_dir = '/datasets_master/MITscenes/'
+    src_dir = './datasets/MITscenes/Images'
+    dst_dir = './datasets/MITscenes/'
 
-    train_filename = '/datasets_master/MITscenes/TrainImages.txt'
+    train_filename = './datasets/MITscenes/TrainImages.txt'
     #copy_images_for_scr_to_dst(train_filename, src_dir, dst_dir + 'train')
 
-    test_filename = '/datasets_master/MITscenes/TestImages.txt'
+    test_filename = './datasets/MITscenes/TestImages.txt'
     #copy_images_for_scr_to_dst(test_filename, src_dir, dst_dir + 'test')
