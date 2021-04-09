@@ -1,7 +1,7 @@
 from __future__ import print_function
 
 import numpy as np
-import torchnet as tnt
+#import torchnet as tnt
 import torch.utils.data
 
 
@@ -34,20 +34,24 @@ class SimpleDataloader:
         self.train = train
 
     def get_iterator(self, epoch=0):
+        if self.epoch_size != self.dataset_size:
+            elem_list = generate_element_list(self.epoch_size, self.dataset_size)
+            dataset = torch.utils.data.Subset(self.dataset, elem_list)
+        else:
+            dataset = self.dataset
+        data_loader = torch.utils.data.DataLoader(
+            dataset, batch_size=self.batch_size, shuffle=self.train,
+            num_workers=self.num_workers, drop_last=self.train)
+        """
         def load_fun_(idx):
             return self.dataset[idx % len(self.dataset)]
-
-        elem_list = generate_element_list(self.epoch_size, self.dataset_size)
-
-        tnt_dataset = tnt.dataset.ListDataset(
-            elem_list=elem_list, load=load_fun_)
-
+        tnt_dataset = tnt.dataset.ListDataset(elem_list=elem_list, load=load_fun_)
         data_loader = tnt_dataset.parallel(
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             shuffle=self.train,
             drop_last=self.train)
-
+        """
         return data_loader
 
     def __call__(self, epoch=0):

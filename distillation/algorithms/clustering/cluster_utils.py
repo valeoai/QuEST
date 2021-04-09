@@ -53,7 +53,7 @@ def run_kmeans(x, nmb_clusters, verbose=False, useFloat16=False):
     # from an epoch to another.
     clus.seed = np.random.randint(1234)
     if verbose:
-        print(f'==> k-means loss evolution: {clus.seed}')
+        print(f'==> k-means seed: {clus.seed}')
 
     clus.niter = 20
     clus.max_points_per_centroid = 10000000
@@ -65,7 +65,9 @@ def run_kmeans(x, nmb_clusters, verbose=False, useFloat16=False):
     # perform the training
     clus.train(x, index)
     _, I = index.search(x, 1)
-    losses = faiss.vector_to_array(clus.obj)
+    #losses = faiss.vector_to_array(clus.obj)
+    #losses = faiss.vector_to_array(obj)
+    losses = np.array([clus.iteration_stats.at(i).obj for i in range(clus.niter)]) / n_data
     if verbose:
         print(f'==> k-means loss evolution: {losses}')
 

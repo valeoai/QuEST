@@ -18,6 +18,7 @@ _CIFAR_STD_PIXEL = [0.2675, 0.2565, 0.2761]  #[x/255.0 for x in [63.0, 62.1, 66.
 class CIFARbase(data.Dataset):
     def __init__(
         self,
+        data_dir=_CIFAR_DATASET_DIR,
         split='train',
         transform_train=None,
         transform_test=None,
@@ -37,7 +38,7 @@ class CIFARbase(data.Dataset):
         print(self.transform)
 
         self.data = datasets.__dict__[version](
-            _CIFAR_DATASET_DIR,
+            data_dir,
             train=(self.split=='train'),
             download=True,
             transform=self.transform)
@@ -59,22 +60,25 @@ class CIFARbase(data.Dataset):
 
 
 class CIFAR100(CIFARbase):
-    def __init__(self, split='train'):
-
+    def __init__(
+        self,
+        data_dir=_CIFAR_DATASET_DIR,
+        split='train',
+        do_not_use_random_transf=False):
         normalize = transforms.Normalize(mean=_CIFAR_MEAN_PIXEL, std=_CIFAR_STD_PIXEL)
         transform_test = transforms.Compose([
-            lambda x: np.asarray(x),
             transforms.ToTensor(),
             normalize])
         transform_train = transforms.Compose([
             transforms.RandomCrop(32, padding=4, padding_mode='reflect'),
             transforms.RandomHorizontalFlip(),
-            lambda x: np.asarray(x),
             transforms.ToTensor(),
             normalize])
-
+        if do_not_use_random_transf:
+            transform_train = transform_test
         CIFARbase.__init__(
             self,
+            data_dir=data_dir,
             split=split,
             transform_train=transform_train,
             transform_test=transform_test,

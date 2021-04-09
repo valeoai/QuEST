@@ -35,6 +35,7 @@ command_line_arguments = dict(config='',
                               kmeans=0,
                               fname=None,
                               ksubset=None,
+                              data_dir=None,
                               memmap=False,
                               memmap_dir='./tmp')
 ex.add_config(command_line_arguments)
@@ -52,6 +53,7 @@ def main_experiment(config,
                     kmeans,
                     fname,
                     ksubset,
+                    data_dir,
                     memmap,
                     memmap_dir,
                     _run,
@@ -79,9 +81,11 @@ def main_experiment(config,
     # Set train and test datasets and the corresponding data loaders
     data_train_opt = config['data_train_opt']
     data_test_opt = config['data_test_opt']
-
     dataset_train_args = data_train_opt['dataset_args']
     dataset_test_args = data_test_opt['dataset_args']
+    if data_dir is not None:
+        dataset_train_args["data_dir"] = data_dir
+        dataset_test_args["data_dir"] = data_dir
     batch_size_test = data_test_opt.get('batch_size', data_train_opt['batch_size'])
 
     if testset:
@@ -113,11 +117,7 @@ def main_experiment(config,
 
     elif kmeans > 0:
         algorithm.load_checkpoint(epoch='*', train=False, suffix='')
-
         dataset_train_args['do_not_use_random_transf'] = True
-        #if data_train_opt['dataset_name'] == 'ImageNet':
-        #    dataset_train_args['size256'] = True
-
         dataset_train = dataset_factory(
             dataset_name=data_train_opt['dataset_name'], **dataset_train_args)
 

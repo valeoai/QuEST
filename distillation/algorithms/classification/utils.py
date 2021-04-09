@@ -44,10 +44,9 @@ def object_classification(
         record['loss'] = loss.item()
 
     with torch.no_grad(): # Compute accuracies.
-        AccuracyTop1, AccuracyTop5 = compute_top1_and_top5_accuracy(
-            scores_cls, labels)
-        record['AccuracyTop1'] = AccuracyTop1
-        record['AccuracyTop5'] = AccuracyTop5
+        accur_top1, accur_top5 = compute_top1_and_top5_accuracy(scores, labels)
+        record['AccuracyTop1'] = accur_top1
+        record['AccuracyTop5'] = accur_top5
 
     if is_train: # Backward loss and apply gradient steps.
         loss.backward()

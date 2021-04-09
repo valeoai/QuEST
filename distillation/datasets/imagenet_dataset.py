@@ -9,25 +9,27 @@ import torch.utils.data as data
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from PIL import Image
-from valeodata import download
 
 import distillation.utils as utils
 
 # Set the appropriate paths of the datasets here.
-_IMAGENET_DATASET_DIR = './datasets/IMAGENET/ILSVRC2012'
+_IMAGENET_DATASET_DIR = '/datasets_local/ImageNet'
 _MEAN_PIXEL = [0.485, 0.456, 0.406]
 _STD_PIXEL = [0.229, 0.224, 0.225]
 
 
 class ImageNetBase(data.Dataset):
-    def __init__(self, split='train', transform=None):
+    def __init__(
+        self,
+        data_dir=_IMAGENET_DATASET_DIR,
+        split='train',
+        transform=None):
         assert (split in ('train', 'val')) or (split.find('train_subset') != -1)
         self.split = split
         self.name = f'ImageNet_Split_' + self.split
 
-        data_dir = download('ImageNet')
-        print(f'==> Loading {dataset_name} dataset - split {self.split}')
-        print(f'==> {dataset_name} directory: {data_dir}')
+        print(f'==> Loading ImageNet dataset - split {self.split}')
+        print(f'==> ImageNet directory: {data_dir}')
 
         self.transform = transform
         print(f'==> transform: {self.transform}')
@@ -62,24 +64,25 @@ class ImageNetBase(data.Dataset):
 
 
 class ImageNet(ImageNetBase):
-    def __init__(self, split='train'):
-
+    def __init__(
+        self,
+        data_dir=_IMAGENET_DATASET_DIR,
+        split='train',
+        do_not_use_random_transf=False):
         transform_train = transforms.Compose([
             transforms.RandomResizedCrop(224),
             transforms.RandomHorizontalFlip(),
-            lambda x: np.asarray(x),
             transforms.ToTensor(),
             transforms.Normalize(mean=_MEAN_PIXEL, std=_STD_PIXEL),
         ])
         transform_test = transforms.Compose([
             transforms.Resize(256),
             transforms.CenterCrop(224),
-            lambda x: np.asarray(x),
             transforms.ToTensor(),
             transforms.Normalize(mean=_MEAN_PIXEL, std=_STD_PIXEL),
         ])
-        if split == 'val':
+        if do_not_use_random_transf or (split == 'val'):
             transform = transform_test
         else:
             transform = transform_train
-        ImageNetBase.__init__(self, split=split, transform=transform)
+        ImageNetBase.__init__(self, data_dir=data_dir, split=split, transform=transform)

@@ -4,4 +4,10 @@ from setuptools import find_packages
 setup(
     name='QuEST',
     description='QUEST: Quantized embedding space for transferring knowledge',
-    packages=find_packages())
+    packages=find_packages(),
+    install_requires=["tqdm",
+                      "numpy",
+                      "torch",
+                      "torchvision",
+                      "Pillow"]
+    )

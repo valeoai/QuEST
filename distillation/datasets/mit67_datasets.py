@@ -11,12 +11,14 @@ import torch.utils.data as data
 import torchvision.datasets as datasets
 import torchvision.transforms as transforms
 from PIL import Image
-from valeodata import download
 
 import distillation.utils as utils
 
 from distillation.datasets.imagenet_dataset import _MEAN_PIXEL
 from distillation.datasets.imagenet_dataset import _STD_PIXEL
+
+# Set the appropriate paths of the datasets here.
+_MIT67_DATASET_DIR = '/datasets_local/MITScenes67'
 
 
 class MaskedRandomSampler(data.Sampler):
@@ -76,6 +78,7 @@ def get_dataset_subsplit(data, num_examples, split_ratio, repeat=False):
 class AbstractDataset(data.Dataset):
     def __init__(
         self,
+        data_dir=_MIT67_DATASET_DIR,
         split="train",
         dataset_name="MITScenes67",
         num_examples=None,
@@ -87,7 +90,6 @@ class AbstractDataset(data.Dataset):
         if (num_examples is not None) and (split in ("train", "val", "trainval")):
             self.name += f"_NumExamples_{num_examples}"
 
-        data_dir = download(dataset_name)
         print(f"==> Loading {dataset_name} dataset - split {self.split}")
         print(f"==> {dataset_name} directory: {data_dir}")
 
@@ -123,7 +125,12 @@ class AbstractDataset(data.Dataset):
 
 
 class MITScenes(AbstractDataset):
-    def __init__(self, split="train", num_examples=None):
+    def __init__(
+        self,
+        data_dir=_MIT67_DATASET_DIR,
+        split="train",
+        num_examples=None,
+        do_not_use_random_transf=False):
 
         normalize = transforms.Normalize(
             mean=_MEAN_PIXEL,
@@ -141,12 +148,11 @@ class MITScenes(AbstractDataset):
             transforms.ToTensor(),
             normalize,
         ])
-
-        if split == "test":
+        if do_not_use_random_transf or (split == "test"):
             transform = transform_test
         else:
             transform = transform_train
 
         AbstractDataset.__init__(
-            self, split=split, dataset_name="MITScenes67",
+            self, data_dir=data_dir, split=split, dataset_name="MITScenes67",
             num_examples=num_examples, transform=transform)
