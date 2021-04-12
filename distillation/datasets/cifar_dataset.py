@@ -10,7 +10,6 @@ from PIL import Image
 
 
 _CIFAR_DATASET_DIR = './datasets/CIFAR'
-_CIFAR_CATEGORY_SPLITS_DIR = './data/cifar-fs_splits'
 _CIFAR_MEAN_PIXEL  = [0.5071, 0.4867, 0.4408]#[x/255.0 for x in [125.3, 123.0, 113.9]]
 _CIFAR_STD_PIXEL = [0.2675, 0.2565, 0.2761]  #[x/255.0 for x in [63.0, 62.1, 66.7]]
 
