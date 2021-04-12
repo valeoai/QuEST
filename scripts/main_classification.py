@@ -61,7 +61,7 @@ def main_experiment(config,
     exp_config_file = config
     exp_base_directory = (
         os.path.join(project_root, 'experiments') if localpath=='' else localpath)
-    if kmeans>0:
+    if kmeans > 0:
         exp_base_directory = os.path.join(exp_base_directory, 'VQ')
 
     exp_directory = os.path.join(exp_base_directory, config.replace('.', '/'))
