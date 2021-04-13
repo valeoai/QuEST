@@ -13,13 +13,10 @@ from distillation.dataloaders.basic_dataloaders import DataloaderSampler
 from distillation.datasets import dataset_factory
 from distillation import project_root
 
-#SETTINGS.DISCOVER_DEPENDENCIES = 'sys'
 SETTINGS.CAPTURE_MODE = 'sys'
 
 ex = Experiment('classification_distillation')
-#observer = MongoObserver.create(url='192.168.50.28:27017', # don't change this
-#                                db_name='spyros_few_shots') # change this
-#ex.observers.append(observer)
+
 
 ex.captured_out_filter = apply_backspaces_and_linefeeds
 
@@ -107,7 +104,7 @@ def main_experiment(config,
     elif algorithm_type == 'classification.classification':
         algorithm = Classification(config, _run, _log)
 
-    if cuda: # enable cuda
+    if cuda:  # enable cuda
         algorithm.load_to_gpu()
 
     if evaluate:
@@ -145,7 +142,7 @@ def main_experiment(config,
             memmap=memmap,
             memmap_dir=memmap_dir)
     else:
-        if checkpoint != 0: # load checkpoint
+        if checkpoint != 0:  # load checkpoint
             algorithm.load_checkpoint(
                 epoch=checkpoint if (checkpoint > 0) else '*', train=True)
 

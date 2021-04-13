@@ -56,7 +56,7 @@ The datasets are expected to be split into train and test data in different fold
 
 #### Teacher models
 **ImageNet**: We use the pre-trained model provided by torchvision.models.\
-**CIFAR100**: Run cifar100_teacher_download.py to download the teachers models. 
+**CIFAR100**: Run download_cifar100_teacher.py to download all the teachers models used in the paper for CIFAR100. 
 
 #### Config files
 Config files named as <*TeacherNetwork*> or <*TeacherNetwork_StudentNetwork*>.
