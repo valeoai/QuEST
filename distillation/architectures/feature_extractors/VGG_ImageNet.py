@@ -64,9 +64,6 @@ def vgg7(pretrained=False, **kwargs):
     """
     model = VGG(make_layers(cfg["vgg7"]), **kwargs)
 
-    #model.feature_modules = [
-    #    (num_channel, list(model.features.children())[i]) for (num_channel, i) in [(128, 7)]]
-
     if "load_path" in kwargs:
         model.load_state_dict(torch.load(kwargs["load_path"]))
 
@@ -78,10 +75,6 @@ def vgg9(pretrained=False, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
     """
     model = VGG(make_layers(cfg["vgg9"]), **kwargs)
-
-    #model.feature_modules = [
-    #    (num_channel, list(model.features.children())[i]) for (num_channel, i) in [
-    #        (128, 7), (256, 14), (512, 21), (512, 28)]]
 
     if pretrained:
         state_dict = model_zoo.load_url(model_urls['vgg11_bn'])

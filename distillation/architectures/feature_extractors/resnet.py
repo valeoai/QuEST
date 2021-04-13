@@ -204,7 +204,7 @@ class ResNet(nn.Module):
         if self.downscale:
             x = self.avgpool_2x2(x)
         x = self.avgpool(x)
-        x = self.reshape(x) #x.view(x.size(0), -1)
+        x = self.reshape(x)
         f4 = x
         x = self.fc(x)
 

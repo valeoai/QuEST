@@ -42,12 +42,6 @@ class VectorQuantizerEMA(nn.Module):
 
     def forward(self, inputs, encodings_out=False):
         # convert inputs from BCHW -> BHWC
-        # if self._normalizeF:
-        #     inputs = F.normalize(inputs, p=2, dim=1)
-        #
-        # elif self._global_pooling:
-        #     inputs = tools.global_pooling(inputs, pool_type='avg')
-
         inputs = inputs.permute(0, 2, 3, 1).contiguous()
         input_shape = inputs.shape
 
@@ -107,7 +101,6 @@ class VectorQuantizerEMA(nn.Module):
         if self._temperature is not None:
             encodings = F.softmax(- self._temperature * distances, dim=1)
             mean_assign_score = F.softmax(- self._temperature * distances, dim=1).max(dim=1)[0].mean()
-                # F.softmax(- self._temperature * distances, dim=1).max(dim=1)[0].mean() ==> ~ 0.99
 
         assert encodings.size(1) == self._num_embeddings
         encodings = encodings.view(

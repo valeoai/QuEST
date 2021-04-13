@@ -20,8 +20,7 @@ depth = 56
 num_embeddings = 4096
 
 networks = {}
-pretrained_base = f'./saved_models/resnet56_vanilla/'
-pretrained_teacher = pretrained_base + 'ckpt_epoch_240.pth'
+pretrained_teacher = './saved_models/resnet56_vanilla/ckpt_epoch_240.pth'
 
 net_optionsF = {
     'depth': depth, 'num_filters': num_filters,

@@ -65,8 +65,6 @@ def run_kmeans(x, nmb_clusters, verbose=False, useFloat16=False):
     # perform the training
     clus.train(x, index)
     _, I = index.search(x, 1)
-    #losses = faiss.vector_to_array(clus.obj)
-    #losses = faiss.vector_to_array(obj)
     losses = np.array([clus.iteration_stats.at(i).obj for i in range(clus.niter)]) / n_data
     if verbose:
         print(f'==> k-means loss evolution: {losses}')
@@ -189,8 +187,6 @@ def extract_features_from_dataset(
                 logger.info(f'max count: {max_count}')
                 logger.info(f'batch size: {batch_size}')
 
-            #count = max_count
-            #break
 
         all_features_dataset[count:(count + batch_size)] = features
         count += batch_size

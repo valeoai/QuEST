@@ -154,8 +154,8 @@ class ShuffleNetV2(nn.Module):
         out, f3_pre = self.layer3(out)
         f3 = out
         out = self.relu2(self.bn2(self.conv2(out)))
-        out = self.avgpool(out) #F.avg_pool2d(out, 4)
-        out = self.reshape(out) #out.view(out.size(0), -1)
+        out = self.avgpool(out)
+        out = self.reshape(out)
         f4 = out
         out = self.linear(out)
         if is_feat:

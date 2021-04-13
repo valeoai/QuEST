@@ -30,7 +30,7 @@ if __name__ == '__main__':
     dst_dir = './datasets/MITscenes/'
 
     train_filename = './datasets/MITscenes/TrainImages.txt'
-    #copy_images_for_scr_to_dst(train_filename, src_dir, dst_dir + 'train')
+    copy_images_for_scr_to_dst(train_filename, src_dir, dst_dir + 'train')
 
     test_filename = './datasets/MITscenes/TestImages.txt'
-    #copy_images_for_scr_to_dst(test_filename, src_dir, dst_dir + 'test')
+    copy_images_for_scr_to_dst(test_filename, src_dir, dst_dir + 'test')

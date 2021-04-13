@@ -46,7 +46,6 @@ class MobileNet(nn.Module):
             tools.Reshape(-1, 1024),
             nn.Linear(1024, 1000)
         )
-        #self.fc = nn.Linear(1024, 1000)
 
     def forward(self, x):
         x = self.features(x)

@@ -92,15 +92,15 @@ def split_network( model, extract_from_layer, after_relu):
         for i in range(extract_from+1): # Feature extractor
             feat_ext.append(model._modules[key_names[i]])
         i = extract_from+1
-        if after_relu[0]: # Include till next ReLU
+        if after_relu[0]:  # Include till next ReLU
                 if key_names[i].startswith('bn'):
-                    feat_ext.append(model._modules[key_names[i]]) # BatchNorm
+                    feat_ext.append(model._modules[key_names[i]])  # BatchNorm
                     i +=1
-                feat_ext.append(model._modules[key_names[i]]) # ReLU
+                feat_ext.append(model._modules[key_names[i]])  # ReLU
                 i +=1
         for key in key_names[i:]: # Classifier
             clf.append(model._modules[key])
-        if isinstance(model, mobilenet.MobileNetV2): ## MobileNet2 for CIFAR
+        if isinstance(model, mobilenet.MobileNetV2):  # MobileNet2 for CIFAR
             fext = nn.Sequential(*feat_ext)
             feat_ext = []
             for k in fext._modules.keys():
@@ -109,12 +109,12 @@ def split_network( model, extract_from_layer, after_relu):
                 else:
                     feat_ext.append(fext._modules[k])
         return nn.Sequential(*feat_ext), nn.Sequential(*clf)
-    else: ## For multiple extraction layers, implemented split only for VGG9 and ResNet34.
-        if isinstance(model, VGG_ImageNet.VGG): ## VGG9. As in VGG9 network the layers are named by digits.
+    else:  # For multiple extraction layers, implemented split only for VGG9 and ResNet34.
+        if isinstance(model, VGG_ImageNet.VGG):  # VGG9. As in VGG9 network the layers are named by digits.
             feature_ext = VGG9FeatureExtractor(model, extract_from_layer)
             classifier = VGG9Classifier(model)
             return feature_ext, classifier
-        else: ## ResNet34
+        else:  # ResNet34
             assert all([(x == False) for x in after_relu])
             feature_ext = ResNetFeatureExtractor(model)
             classifier = ResNetClassifier(model)

@@ -48,7 +48,6 @@ class Bottleneck(nn.Module):
         res = self.shortcut(x)
         preact = torch.cat([out, res], 1) if self.stride == 2 else out+res
         out = F.relu(preact)
-        # out = F.relu(torch.cat([out, res], 1)) if self.stride == 2 else F.relu(out+res)
         if self.is_last and self.with_preact:
             return out, preact
         else:
@@ -106,8 +105,8 @@ class ShuffleNet(nn.Module):
         f2 = out
         out, f3_pre = self.layer3(out)
         f3 = out
-        out = self.avgpool(out) #F.avg_pool2d(out, 4)
-        out = self.reshape(out) #out.view(out.size(0), -1)
+        out = self.avgpool(out)
+        out = self.reshape(out)
         f4 = out
         out = self.linear(out)
 

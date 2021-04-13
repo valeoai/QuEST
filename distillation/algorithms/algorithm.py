@@ -153,7 +153,7 @@ class Algorithm:
             self.logger.info(
                 f'==> WARNING: network parameters in pre-trained file'
                 f' {pretrained_path} do not strictly match')
-            #with torch.set_grad_enabled(False):
+
             for pname, param in network.named_parameters():
                 if pname in pretrained_model['network']:
                     self.logger.info(
@@ -183,16 +183,6 @@ class Algorithm:
             optimizer = torch.optim.Adam(parameters, lr=learning_rate,
                 betas=optim_opts['beta'],
                 weight_decay=weight_decay)
-
-            #if 'beta' in optim_opts:
-            #    weight_decay = (
-            #        optim_opts['weight_decay']
-            #        if ('weight_decay' in optim_opts) else 0.0)
-            #    optimizer = torch.optim.Adam(parameters, lr=learning_rate,
-            #        betas=optim_opts['beta'], weight_decay=weight_decay)
-            #elif 'weight_decay' in optim_opts:
-            #    optimizer = torch.optim.Adam(parameters, lr=learning_rate,
-            #        weight_decay=optim_opts['weight_decay'])
         elif optim_type == 'sgd':
             nesterov = (
                 optim_opts.get('nesterov', False))

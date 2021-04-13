@@ -20,7 +20,7 @@ depth = 40
 num_embeddings = 4096
 
 networks = {}
-pretrained = f'./saved_models/cifar100v3_WRNd{depth}w{width}LinearClassifier/ckpt_epoch_240.pth'
+pretrained = f'./saved_models/wrn_40_2_vanilla/ckpt_epoch_240.pth'
 
 net_optionsF = {
     'depth': depth, 'widen_Factor': width, 'dropRate': 0.0,
