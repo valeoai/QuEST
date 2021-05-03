@@ -6,7 +6,7 @@ This is pytorch implementation for [QuEST](https://www.ecva.net/papers/eccv_2020
 **Paper:**   [QuEST: Quantized embedding space for transferring knowledge](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123660171.pdf) <br>
 **Authors:** Himalaya Jain, Spyros Gidaris, Nikos Komodakis, Patrick Pérez, Matthieu Cord <br>
 **arXiv:**   https://arxiv.org/abs/1912.01540
-
+**[Video summary](https://www.youtube.com/watch?v=bJyJkAhjp88)**
 If you find this repo useful for your research, please consider citing the paper.
 ```
 @article{jain2019quest,
