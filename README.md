@@ -1,12 +1,12 @@
 # QuEST: Quantized embedding space for transferring knowledge
 This is pytorch implementation for [QuEST](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123660171.pdf), an approach for knowledge distillation.
 
-[![Video](QuEST.png)](https://www.youtube.com/watch?v=bJyJkAhjp88)
+![](QuEST.png)
 
 **Paper:**   [QuEST: Quantized embedding space for transferring knowledge](https://www.ecva.net/papers/eccv_2020/papers_ECCV/papers/123660171.pdf) <br>
 **Authors:** Himalaya Jain, Spyros Gidaris, Nikos Komodakis, Patrick Pérez, Matthieu Cord <br>
-**arXiv:**   https://arxiv.org/abs/1912.01540
-**[Video summary](https://www.youtube.com/watch?v=bJyJkAhjp88)**
+[ArXiv](https://arxiv.org/abs/1912.01540) & [video summary](https://www.youtube.com/watch?v=bJyJkAhjp88) <br>
+
 If you find this repo useful for your research, please consider citing the paper.
 ```
 @article{jain2019quest,
