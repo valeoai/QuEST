@@ -6,6 +6,7 @@ setup(
     description='QUEST: Quantized embedding space for transferring knowledge',
     packages=find_packages(),
     install_requires=["tqdm",
+                      "sacred",
                       "numpy",
                       "torch",
                       "torchvision",
