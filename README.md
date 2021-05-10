@@ -39,6 +39,7 @@ git clone https://github.com/valeoai/quest
 # Install the faiss library (for k-means)
 conda install faiss-cpu -c pytorch
 conda install faiss-gpu cudatoolkit=10.0 -c pytorch
+pip install sacred
 # Install QuEST
 pip install -e ./quest
 ```
