@@ -43,7 +43,7 @@ conda install faiss-gpu cudatoolkit=10.0 -c pytorch
 pip install -e ./quest
 ```
 
-With this, you can edit the QuEST code on the fly and import function
+With ``pip install -e ./quest``, you can edit the QuEST code on the fly and import function
 and classes of QuEST in other projects as well.   
 
 **(3)** Optional. To uninstall this package, run:
